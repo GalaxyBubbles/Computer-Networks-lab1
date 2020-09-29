@@ -38,37 +38,45 @@ int possion(double lambda)
 	return x;
 }
 
-int exponent(int beta)
+double exponent(double lambda)
 {
-	int u, x;
-	srand((int)time(0));
-	u = rand() / double(RAND_MAX);
-	x = -beta * log(u);
-	return x;
+	srand((int)clock());
+	double pV = 0.0;
+	while (true)
+	{
+		pV = (double)rand() / (double)RAND_MAX;
+		if (pV != 1)
+		{
+			break;
+		}
+	}
+	pV = (-10000.0 / lambda)*log(1 - pV);
+	return pV;
 }
+
 
 class packet
 {
 public:
 	packet()
 	{
-		arv_time = clock();
-		itv_time = possion(lambda);
+		itv_time = (int)exponent(lambda);
 		Sleep(itv_time);
-		wat_time = possion(beta);
+		arv_time = clock();
+		wat_time = (int)exponent(beta);
 	}
-	clock_t get_arv_time() { return arv_time; }
-	clock_t get_wat_time() { return wat_time; }
-	clock_t get_sev_time() { return sev_time; }
-	clock_t get_itv_time() { return itv_time; }
+	double get_arv_time() { return arv_time; }
+	double get_wat_time() { return wat_time; }
+	double get_sev_time() { return sev_time; }
+	double get_itv_time() { return itv_time; }
 	void set_sev_time(int t) { sev_time = t; }
 private:
-	clock_t arv_time;
-	clock_t itv_time;//interval of arrive time
-	clock_t wat_time;
-	clock_t sev_time;
-	int lambda = 7;
-	int beta = 10;
+	double arv_time;
+	double itv_time;//interval of arrive time
+	double sev_time;//the time a packet get service
+	double wat_time;//total serve time
+	int lambda = 4;
+	int beta = 8;
 };
 
 class server
